@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$P6ENV_DEBUG" ] && set -x
 
-shell="$(basename "${RBENV_SHELL:-$SHELL}")"
+shell="$(basename "${P6ENV_SHELL:-$SHELL}")"
 
 # Parse command line flags
 for arg; do
@@ -11,7 +11,7 @@ for arg; do
   -v | --verbose ) verbose=true ;;
   -q | --quiet | --silent ) quiet=true ;;
   * )
-    echo "command rbenv update $@"
+    echo "command p6env update $@"
     exit ;;
   esac
 done
@@ -30,15 +30,15 @@ colorize() {
 
 case "$shell" in
   fish )
-    echo "if command rbenv update $@"
-      if [ -z "$quiet" ]; then colorize "Reloading rbenv\n"; fi
-      if [ -z "$noop" ];  then echo "  source (rbenv init -|psub)"; fi
+    echo "if command p6env update $@"
+      if [ -z "$quiet" ]; then colorize "Reloading p6env\n"; fi
+      if [ -z "$noop" ];  then echo "  source (p6env init -|psub)"; fi
       if [ -z "$quiet" ]; then colorize " | " "done\n"; fi
     echo "end" ;;
   * )
-    echo "if command rbenv update $@; then"
-      if [ -z "$quiet" ]; then colorize "Reloading rbenv\n"; fi
-      if [ -z "$noop" ];  then echo "  eval \"\$(rbenv init -)\";"; fi
+    echo "if command p6env update $@; then"
+      if [ -z "$quiet" ]; then colorize "Reloading p6env\n"; fi
+      if [ -z "$noop" ];  then echo "  eval \"\$(p6env init -)\";"; fi
       if [ -z "$quiet" ]; then colorize " | " "done\n"; fi
     echo "fi;" ;;
 esac

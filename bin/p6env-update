@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Usage: rbenv update [--noop|--verbose|--quiet]
-# Summary: Updates to latest version of rbenv and plugins from git.
+# Usage: p6env update [--noop|--verbose|--quiet]
+# Summary: Updates to latest version of p6env and plugins from git.
 set -e
-[ -n "$RBENV_DEBUG" ] && set -x
+[ -n "$P6ENV_DEBUG" ] && set -x
 
 # Parse command line flags
-# Provide rbenv completions
+# Provide p6env completions
 noop=""
 verbose=""
 quiet=""
@@ -20,10 +20,10 @@ for arg; do
     echo --verbose
     exit ;;
   --help )
-    exec rbenv-help update
+    exec p6env-help update
     ;;
   * )
-    rbenv-help --usage update >&2
+    p6env-help --usage update >&2
     exit 1 ;;
   esac
 done
@@ -66,16 +66,16 @@ git() {
   fi
 }
 
-is_rbenv_git_repo() {
-  command git remote -v 2>/dev/null | grep -q 'rbenv\|ruby-build'
+is_p6env_git_repo() {
+  command git remote -v 2>/dev/null | grep -q 'p6env\|perl6-build'
 }
 
-rbenv_update() {
-  if is_rbenv_git_repo; then
+p6env_update() {
+  if is_p6env_git_repo; then
     print_colored "Updating $1"
     git pull --no-rebase --ff
   else
-    print_colored "Skipping $1; not an rbenv git repo"
+    print_colored "Skipping $1; not an p6env git repo"
   fi
 }
 
@@ -85,13 +85,13 @@ if [ -n "$noop" ] && [ -n "$quiet" ]; then
   print_colored "Both --noop and --quiet given; ignoring --quiet" >&2
 fi
 
-cd "$(dirname "$(which rbenv)")"
-rbenv_update rbenv
+cd "$(dirname "$(which p6env)")"
+p6env_update p6env
 
 shopt -s nullglob
-for plugin in "$RBENV_ROOT"/plugins/*; do
+for plugin in "$P6ENV_ROOT"/plugins/*; do
   pushd "$plugin" >/dev/null
-  rbenv_update "$(basename "$plugin")"
+  p6env_update "$(basename "$plugin")"
   popd >/dev/null
 done
 shopt -u nullglob
